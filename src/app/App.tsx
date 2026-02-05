@@ -13,17 +13,6 @@ function AppContent() {
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Redirect to primary domain unless using the backdoor path.
-  useEffect(() => {
-    const { hostname, pathname, search, hash } = window.location;
-    const isBackdoor = pathname.startsWith('/backdoor');
-    const isPrimaryDomain = hostname === 'www.tinalbygg.se';
-
-    if (!isBackdoor && !isPrimaryDomain) {
-      window.location.replace(`https://www.tinalbygg.se${pathname}${search}${hash}`);
-    }
-  }, []);
-
   // Detect scroll position
   useEffect(() => {
     const handleScroll = () => {
