@@ -101,8 +101,8 @@ function AppContent() {
           {/* CTA & Language Switcher */}
           <div className="flex items-center gap-6">{/* Changed from gap-4 to gap-6 */}
             {/* CTA Button */}
-            <button
-              className="bg-white text-gray-900 px-6 py-3 font-medium text-sm tracking-wide transition-all hover:bg-gray-300 hover:shadow-lg"
+            <button 
+              className="bg-white text-gray-900 px-6 py-3 font-medium text-sm tracking-wide transition-all hover:bg-gray-300 hover:shadow-lg rounded-md"
               style={{ fontFamily: 'Inter, sans-serif' }}
               onClick={() => window.open('https://tally.so/r/7Rx0B9', '_blank')}
             >
@@ -121,7 +121,7 @@ function AppContent() {
               </button>
 
               {showLangMenu && (
-                <div className="absolute top-full mt-2 right-0 bg-white rounded shadow-lg py-2 min-w-[140px]">
+                <div className="absolute top-full mt-2 right-0 bg-white rounded-md shadow-lg py-2 min-w-[140px]">
                   {languages.map((lang) => (
                     <button
                       key={lang.code}

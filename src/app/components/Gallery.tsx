@@ -63,9 +63,9 @@ export function Gallery() {
         {/* Gallery Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
           {galleryImages.map((image, index) => (
-            <div
+            <div 
               key={index}
-              className={`${image.span} overflow-hidden group cursor-pointer`}
+              className={`${image.span} overflow-hidden group cursor-pointer rounded-md`}
             >
               <ImageWithFallback
                 src={image.url}

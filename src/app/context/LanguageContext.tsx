@@ -18,7 +18,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.services': 'Services',
     'nav.gallery': 'Gallery',
     'nav.contact': 'Contact',
-    'nav.cta': 'Fill in application form',
+    'nav.cta': 'Application form',
 
     // Hero
     'hero.title': 'TINAL BYGG AB',
@@ -238,7 +238,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.services': 'Pakalpojumi',
     'nav.gallery': 'Galerija',
     'nav.contact': 'Kontakti',
-    'nav.cta': 'Aizpildīt pieteikuma veidlapu',
+    'nav.cta': 'Pieteikuma veidlapa',
 
     // Hero
     'hero.title': 'TINAL BYGG AB',
