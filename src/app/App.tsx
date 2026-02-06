@@ -6,7 +6,7 @@ import { Contact } from './components/Contact';
 import { HeroFeatures } from './components/HeroFeatures';
 import { ImageWithFallback } from './components/figma/ImageWithFallback';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
-import { Globe } from 'lucide-react';
+import { FileText, Globe } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import logoImage from '../assets/tinal-bygg-white.svg';
 import heroImage from '../assets/2.webp';
@@ -85,9 +85,9 @@ function AppContent() {
         </div>
 
         {/* Navigation Bar */}
-        <nav className={`fixed top-0 left-0 right-0 z-50 px-8 lg:px-16 backdrop-blur-md transition-all duration-700 ease-in-out ${isScrolled ? 'bg-black/70' : 'bg-black/30'
+        <nav className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-16 backdrop-blur-md transition-all duration-700 ease-in-out ${isScrolled ? 'bg-black/70' : 'bg-black/30'
           } ${showNavCTA ? 'py-3' : 'py-4'}`}>
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+          <div className="flex items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] md:items-center">
           {/* Logo - Left */}
           <div className="flex-shrink-0 -ml-2">
             <img
@@ -118,15 +118,17 @@ function AppContent() {
           </ul>
 
           {/* CTA & Language Switcher - Right */}
-          <div className="flex items-center justify-end gap-6">{/* Changed from gap-4 to gap-6 */}
+          <div className="flex items-center justify-end gap-3 sm:gap-6 ml-auto md:ml-0">{/* Changed from gap-4 to gap-6 */}
             {/* CTA Button - Only show when scrolled */}
             {showNavCTA && (
               <button
-              className="text-white px-5 py-2 font-medium text-sm tracking-wide transition-all hover:shadow-md hover:bg-[#2f3f8a] animate-fadeIn border-r-2 cursor-pointer rounded-md bg-[#384A9C]"
+              className="text-white px-3 py-2 sm:px-5 sm:py-2 font-medium text-xs sm:text-sm tracking-wide transition-all hover:shadow-md hover:bg-[#2f3f8a] animate-fadeIn border-r-2 cursor-pointer rounded-md bg-[#384A9C] flex items-center gap-2"
                 style={{ fontFamily: 'Inter, sans-serif' }}
                 onClick={() => window.open('https://tally.so/r/7Rx0B9', '_blank')}
               >
-                {t('nav.cta')}
+                <FileText className="h-4 w-4 sm:hidden" />
+                <span className="sm:hidden">Fill application</span>
+                <span className="hidden sm:inline">{t('nav.cta')}</span>
               </button>
             )}
 
