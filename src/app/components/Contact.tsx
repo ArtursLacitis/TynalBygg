@@ -1,11 +1,11 @@
 import arturs_lacitis from '../../assets/arturs-lacitis.webp';
-import arturs_lacitis_fallback from '../../assets/fallback/arturs-lacitis.png';
 import elmars_trankalis from '../../assets/elmars-trankalis.webp';
-import elmars_trankalis_fallback from '../../assets/fallback/elmars-trankalis.png';
+import toms_vaseris from '../../assets/toms-vaseris.webp';
 import { Mail, Phone } from 'lucide-react';
 import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { projectId, publicAnonKey } from "./../../../utils/supabase/info";
 
 const teamMembers = [
   {
@@ -27,7 +27,6 @@ const teamMembers = [
       lv: 'Sveiki! Es esmu laimīgs trīs bērnu tēvs, mīlošs vīrs un divu apburošu suņu saimnieks. Kā ikviens, kam ir bērni un suņi, es zinu, kā atrast risinājumus pat tur, kur tie šķiet neiespējami. Jūs jau esat pamanījis, kādas iespējas mūsdienās ir, lai attīstītu bērnu prasmes un talantus? Ar pareizu pieeju un spēju motivēt citus mūsu bērni ir atraduši veidus, kā pierādīt sevi pasaulei un par to priecāties. Un ja jūs varat motivēt savu bērnu, jūs varat arī motivēt savus kolēģus.'
     },
     image: arturs_lacitis,
-    fallback: arturs_lacitis_fallback
   },
   {
     name: 'Elmars Trankalis',
@@ -48,104 +47,192 @@ const teamMembers = [
       lv: 'Sveiki! Man ir neticami paveicies, jo manā ģimenē ir trīs princeses - mana sieva un divas apburošas meitas. Šīs meitenes man ir viss! Bet vai jūs zināt, kas man vēl patīk? Automašīnas. Es mīlu atrast aizmirstas vecas automašīnas un pēc tam darīt visu iespējamo, lai atjaunotu to sākotnējo šarmu. Neatlaidība un spītība pabeigt iesākto. Es sāku savu darba dienu ar šīm īpašībām. Un es mācu to pašu saviem kolēģiem - iet līdz galam un pabeigt iesākto līdz 100%.'
     },
     image: elmars_trankalis,
-    fallback: elmars_trankalis_fallback
-  }
+  },
+  {
+    name: "Toms Vaseris",
+    phone: "+46 (0) 735558427",
+    responsibilities: {
+      en: "Responsible for: construction, renovation, project coordination",
+      sv: "Ansvar om: byggande, renovering, projektkoordinering",
+      lv: "Atbildīgs par: būvniecību, renovāciju, projektu koordināciju",
+    },
+    languages: {
+      en: "Speaks: Swedish, English, Latvian",
+      sv: "Talar: svenska, engelska, lettiska",
+      lv: "Runā: zviedru, angļu, latviešu",
+    },
+    bio: {
+      en: "Hello! I have more than 10 years of experience in the construction industry. I performed the work entrusted to me with a great sense of responsibility. I spend a lot of free time improving myself. A few qualities that describe me: Persistent, passionate, optimistic, confident about yourself, focused, intrigued to acquire and improve knowledge.",
+      sv: "Hej! Jag har mer än 10 års erfarenhet inom byggbranschen. Jag utför det arbete som anförtros mig med stor ansvarskänsla. Jag spenderar mycket fritid på att förbättra mig själv. Några egenskaper som beskriver mig: Uthållig, passionerad, optimistisk, självsäker, fokuserad, intresserad av att förvärva och förbättra kunskap.",
+      lv: "Sveiki! Man ir vairāk nekā 10 gadu pieredze būvniecības nozarē. Es veicu man uzticēto darbu ar lielu atbildības sajūtu. Daudz brīvā laika pavadu sevi pilnveidojot. Dažas īpašības, kas mani raksturo: Neatlaidīgs, aizrautīgs, optimistisks, pārliecināts par sevi, fokusēts, ieinteresēts iegūt un pilnveidot zināšanas.",
+    },
+    image: toms_vaseris,
+  },
 ];
 
 export function Contact() {
   const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you for your inquiry! We will contact you shortly.');
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-a04047fa/contact`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${publicAnonKey}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
+
+      const result = await response.json();
+      console.log("Email sent successfully:", result);
+
+      alert(
+        language === "en"
+          ? "Thank you for your inquiry! We will contact you shortly."
+          : language === "sv"
+            ? "Tack för ditt meddelande! Vi kontaktar dig inom kort."
+            : "Paldies par jūsu ziņojumu! Mēs ar jums sazināsimies drīzumā."
+      );
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert(
+        language === "en"
+          ? "Sorry, there was an error sending your message. Please try again or contact us directly."
+          : language === "sv"
+            ? "Tyvärr uppstod ett fel när meddelandet skickades. Försök igen eller kontakta oss direkt."
+            : "Diemžēl radās kļūda, nosūtot jūsu ziņojumu. Lūdzu, mēģiniet vēlreiz vai sazinieties ar mums tieši."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement
+    >,
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   return (
-    <section id="contact" className="bg-white py-24 px-8 lg:px-16">
+    <section
+      id="contact"
+      className="bg-white py-24 px-8 lg:px-16"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2
-            className="text-5xl md:text-6xl mb-4"
             style={{
-              fontFamily: 'Oswald, sans-serif',
+              fontFamily: "Oswald, sans-serif",
               fontWeight: 600,
-              color: '#384A9C'
+              color: "#384A9C",
+              fontSize: "34px",
+              lineHeight: "1.5",
             }}
           >
-            {t('contact.title')}
+            {t("contact.title")}
           </h2>
           <p
-            className="text-gray-600 text-lg max-w-2xl mx-auto"
-            style={{ fontFamily: 'Inter, sans-serif' }}
+            className="text-gray-600 max-w-2xl mx-auto"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "16px",
+              lineHeight: "1.5",
+            }}
           >
-            {t('contact.subtitle')}
+            {t("contact.subtitle")}
           </p>
         </div>
 
         {/* Team Members */}
         <div className="mb-20">
           <h3
-            className="text-4xl mb-12 text-center"
+            className="mb-12 text-center"
             style={{
-              fontFamily: 'Oswald, sans-serif',
+              fontFamily: "Oswald, sans-serif",
               fontWeight: 600,
-              color: '#1a1a1a'
+              color: "#1a1a1a",
+              fontSize: "22px",
+              lineHeight: "1.5",
             }}
           >
-            {language === 'en' ? 'Our Team' : language === 'sv' ? 'Vårt Team' : 'Mūsu Komanda'}
+            {language === "en"
+              ? "Our Team"
+              : language === "sv"
+                ? "Vårt Team"
+                : "Mūsu Komanda"}
           </h3>
 
-          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {teamMembers.map((member, index) => (
               <div key={index} className="bg-gray-50 p-8 rounded-lg">
                 <div className="flex items-start gap-6 mb-6">
                   <div className="w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
                     <ImageWithFallback
                       src={member.image}
-                      fallbackSrc={member.fallback}
                       alt={member.name}
                       className="w-full h-full object-cover"
-                      loading="lazy"
-                      decoding="async"
                     />
                   </div>
                   <div>
                     <h4
                       className="text-2xl mb-2"
                       style={{
-                        fontFamily: 'Oswald, sans-serif',
+                        fontFamily: "Oswald, sans-serif",
                         fontWeight: 600,
-                        color: '#1a1a1a'
+                        color: "#1a1a1a",
                       }}
                     >
                       {member.name}
                     </h4>
                     <div className="flex items-center gap-2 text-gray-700 mb-1">
                       <Phone className="w-4 h-4" />
-                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px' }}>
+                      <span
+                        style={{
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "14px",
+                        }}
+                      >
                         {member.phone}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-3" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <div
+                  className="space-y-3"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
                   <p className="text-sm text-gray-700 font-medium">
                     {member.responsibilities[language]}
                   </p>
@@ -165,25 +252,54 @@ export function Contact() {
           {/* Contact Information */}
           <div>
             <h3
-              className="text-3xl mb-8"
+              className="mb-8"
               style={{
-                fontFamily: 'Oswald, sans-serif',
+                fontFamily: "Oswald, sans-serif",
                 fontWeight: 600,
-                color: '#1a1a1a'
+                color: "#1a1a1a",
+                fontSize: "22px",
+                lineHeight: "1.5",
               }}
             >
-              {t('contact.getintouch')}
+              {t("contact.getintouch")}
             </h3>
 
-            <div className="space-y-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <div
+              className="space-y-6"
+              style={{ fontFamily: "Inter, sans-serif" }}
+            >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 flex items-center justify-center bg-gray-100 rounded-full flex-shrink-0">
                   <Mail className="w-5 h-5 text-gray-700" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">{t('contact.email')}</h4>
-                  <p className="text-gray-600">tinalbygg@outlook.com</p>
-                  <p className="text-gray-600">info@tinalbygg.se</p>
+                  <h4
+                    className="font-semibold text-gray-900 mb-1"
+                    style={{
+                      fontSize: "16px",
+                      lineHeight: "1.5",
+                    }}
+                  >
+                    {t("contact.email")}
+                  </h4>
+                  <p
+                    className="text-gray-600"
+                    style={{
+                      fontSize: "16px",
+                      lineHeight: "1.5",
+                    }}
+                  >
+                    tinalbygg@outlook.com
+                  </p>
+                  <p
+                    className="text-gray-600"
+                    style={{
+                      fontSize: "16px",
+                      lineHeight: "1.5",
+                    }}
+                  >
+                    info@tinalbygg.se
+                  </p>
                 </div>
               </div>
             </div>
@@ -192,20 +308,30 @@ export function Contact() {
           {/* Contact Form */}
           <div>
             <h3
-              className="text-3xl mb-8"
+              className="mb-8"
               style={{
-                fontFamily: 'Oswald, sans-serif',
+                fontFamily: "Oswald, sans-serif",
                 fontWeight: 600,
-                color: '#1a1a1a'
+                color: "#1a1a1a",
+                fontSize: "22px",
+                lineHeight: "1.5",
               }}
             >
-              {t('contact.form.title')}
+              {t("contact.form.title")}
             </h3>
 
-            <form onSubmit={handleSubmit} className="space-y-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-6"
+              style={{ fontFamily: "Inter, sans-serif" }}
+            >
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('contact.form.name')} {t('contact.form.required')}
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {t("contact.form.name")}{" "}
+                  {t("contact.form.required")}
                 </label>
                 <input
                   type="text"
@@ -214,13 +340,17 @@ export function Contact() {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-gray-900 transition-colors rounded-md"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-900 transition-colors"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('contact.form.email')} {t('contact.form.required')}
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {t("contact.form.email")}{" "}
+                  {t("contact.form.required")}
                 </label>
                 <input
                   type="email"
@@ -229,13 +359,16 @@ export function Contact() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-gray-900 transition-colors rounded-md"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-900 transition-colors"
                 />
               </div>
 
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('contact.form.phone')}
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {t("contact.form.phone")}
                 </label>
                 <input
                   type="tel"
@@ -243,13 +376,17 @@ export function Contact() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-gray-900 transition-colors rounded-md"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-900 transition-colors"
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('contact.form.message')} {t('contact.form.required')}
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {t("contact.form.message")}{" "}
+                  {t("contact.form.required")}
                 </label>
                 <textarea
                   id="message"
@@ -258,15 +395,18 @@ export function Contact() {
                   rows={5}
                   value={formData.message}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-gray-900 transition-colors resize-none rounded-md"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-900 transition-colors resize-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-gray-900 text-white py-4 px-8 font-medium tracking-wide rounded-md shadow-sm hover:bg-gray-800 hover:shadow-md active:scale-[0.99] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30 cursor-pointer"
+                className="w-full bg-gray-900 text-white py-4 px-8 font-medium tracking-wide hover:bg-gray-800 transition-colors rounded-md"
+                disabled={isSubmitting}
               >
-                {t('contact.form.submit')}
+                {isSubmitting
+                  ? t("contact.form.submitting")
+                  : t("contact.form.submit")}
               </button>
             </form>
           </div>

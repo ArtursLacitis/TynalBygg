@@ -1,16 +1,15 @@
-import { Services } from './components/Services';
+import { Services, ScaffoldingRental } from './components/Services';
 import { About } from './components/About';
 import { Gallery } from './components/Gallery';
 import { WhyChooseUs } from './components/WhyChooseUs';
 import { Contact } from './components/Contact';
 import { HeroFeatures } from './components/HeroFeatures';
-import { ImageWithFallback } from './components/figma/ImageWithFallback';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
-import { FileText, Globe } from 'lucide-react';
+import { Globe, FileText } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import logoImage from '../assets/tinal-bygg-white.svg';
 import heroImage from '../assets/2.webp';
-import heroImageFallback from '../assets/fallback/2.jpg';
+import { ImageWithFallback } from './components/figma/ImageWithFallback';
 
 function AppContent() {
   const { language, setLanguage, t } = useLanguage();
@@ -72,7 +71,6 @@ function AppContent() {
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
             src={heroImage}
-            fallbackSrc={heroImageFallback}
             alt="TINAL BYGG AB Interior"
             className="h-full w-full object-cover"
             loading="eager"
@@ -85,86 +83,87 @@ function AppContent() {
         </div>
 
         {/* Navigation Bar */}
-        <nav className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-16 backdrop-blur-md transition-all duration-700 ease-in-out ${isScrolled ? 'bg-black/70' : 'bg-black/30'
+        <nav className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 min-[1150px]:px-10 xl:px-16 backdrop-blur-md transition-all duration-700 ease-in-out ${isScrolled ? 'bg-black/70' : 'bg-black/30'
           } ${showNavCTA ? 'py-3' : 'py-4'}`}>
-          <div className="flex items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] md:items-center">
-          {/* Logo - Left */}
-          <div className="flex-shrink-0 -ml-2">
-            <img
-              src={logoImage}
-              alt="TINAL BYGG AB"
-              className="h-12 cursor-pointer transition-opacity hover:opacity-80"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            />
-          </div>
-
-          {/* Navigation Menu - Center */}
-          <ul className="hidden md:flex items-center gap-6 text-white justify-center" style={{ fontFamily: 'Inter, sans-serif' }}>
-            <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              {t('nav.home')}
-            </li>
-            <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('about')}>
-              {t('nav.about')}
-            </li>
-            <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('services')}>
-              {t('nav.services')}
-            </li>
-            <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('gallery')}>
-              {t('nav.gallery')}
-            </li>
-            <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('contact')}>
-              {t('nav.contact')}
-            </li>
-          </ul>
-
-          {/* CTA & Language Switcher - Right */}
-          <div className="flex items-center justify-end gap-3 sm:gap-6 ml-auto md:ml-0">{/* Changed from gap-4 to gap-6 */}
-            {/* CTA Button - Only show when scrolled */}
-            {showNavCTA && (
-              <button
-              className="text-white px-3 py-2 sm:px-5 sm:py-2 font-medium text-xs sm:text-sm tracking-wide transition-all hover:shadow-md hover:bg-[#2f3f8a] animate-fadeIn border-r-2 cursor-pointer rounded-md bg-[#384A9C] flex items-center gap-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-                onClick={() => window.open('https://tally.so/r/7Rx0B9', '_blank')}
-              >
-                <FileText className="h-4 w-4 sm:hidden" />
-                <span className="sm:hidden">Fill application</span>
-                <span className="hidden sm:inline">{t('nav.cta')}</span>
-              </button>
-            )}
-
-            {/* Language Selector */}
-            <div className="relative">
-              <button
-                onClick={() => setShowLangMenu(!showLangMenu)}
-                className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                <Globe className="w-5 h-5" />
-                <span className="text-sm font-medium uppercase">{language}</span>
-              </button>
-
-              {showLangMenu && (
-                <div className="absolute top-full mt-2 right-0 bg-white rounded shadow-lg py-2 min-w-[140px]">
-                  {languages.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => {
-                        setLanguage(lang.code);
-                        setShowLangMenu(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm transition-colors ${language === lang.code
-                        ? 'bg-gray-100 text-gray-900 font-semibold'
-                        : 'text-gray-700 hover:bg-gray-50'
-                        }`}
-                      style={{ fontFamily: 'Inter, sans-serif' }}
-                    >
-                      {lang.label}
-                    </button>
-                  ))}
-                </div>
-              )}
+          <div className="flex items-center justify-between min-[1150px]:grid min-[1150px]:grid-cols-[1fr_auto_1fr] min-[1150px]:items-center">
+            {/* Logo - Left */}
+            <div className="flex-shrink-0 -ml-2">
+              <img
+                src={logoImage}
+                alt="TINAL BYGG AB"
+                className="h-12 cursor-pointer transition-opacity hover:opacity-80"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              />
             </div>
-          </div>
+
+            {/* Navigation Menu - Center */}
+            <ul className="hidden min-[1150px]:flex items-center gap-4 xl:gap-6 text-white justify-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                {t('nav.home')}
+              </li>
+              <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('about')}>
+                {t('nav.about')}
+              </li>
+              <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('services')}>
+                {t('nav.services')}
+              </li>
+              <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('gallery')}>
+                {t('nav.gallery')}
+              </li>
+              <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('contact')}>
+                {t('nav.contact')}
+              </li>
+            </ul>
+
+            {/* CTA & Language Switcher - Right */}
+            <div className="flex items-center justify-end gap-3 sm:gap-4 min-[1150px]:gap-6 ml-auto min-[1150px]:ml-0">{/* Changed from gap-4 to gap-6 */}
+              {/* CTA Button - Only show when scrolled */}
+              {showNavCTA && (
+                <button
+                  aria-label={t('nav.cta')}
+                  className="text-white px-3 py-2 min-[1150px]:px-5 min-[1150px]:py-2 font-medium text-xs min-[1150px]:text-sm tracking-wide transition-all hover:shadow-md hover:bg-[#2f3f8a] animate-fadeIn border-r-2 cursor-pointer rounded-md bg-[#384A9C] flex items-center gap-2"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                  onClick={() => window.open('https://tally.so/r/7Rx0B9', '_blank')}
+                >
+                  <FileText className="h-4 w-4" />
+                  <span className="min-[500px]:hidden">Fill application</span>
+                  <span className="hidden min-[500px]:inline">{t('nav.cta')}</span>
+                </button>
+              )}
+
+              {/* Language Selector */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowLangMenu(!showLangMenu)}
+                  className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <Globe className="w-5 h-5" />
+                  <span className="text-sm font-medium uppercase hidden min-[1150px]:inline">{language}</span>
+                </button>
+
+                {showLangMenu && (
+                  <div className="absolute top-full mt-2 right-0 bg-white rounded shadow-lg py-2 min-w-[140px]">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          setLanguage(lang.code);
+                          setShowLangMenu(false);
+                        }}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${language === lang.code
+                          ? 'bg-gray-100 text-gray-900 font-semibold'
+                          : 'text-gray-700 hover:bg-gray-50'
+                          }`}
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                      >
+                        {lang.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </nav>
 
@@ -210,6 +209,7 @@ function AppContent() {
       <HeroFeatures />
       <WhyChooseUs />
       <Services />
+      <ScaffoldingRental />
       <About />
       <Gallery />
       <Contact />

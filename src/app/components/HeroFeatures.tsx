@@ -17,11 +17,13 @@ export function HeroFeatures() {
     <section className="bg-white py-20 px-8 lg:px-16">
       <div className="max-w-4xl mx-auto">
         <h2
-          className="text-4xl md:text-5xl mb-12 text-center"
+          className="mb-12 text-center"
           style={{
             fontFamily: 'Oswald, sans-serif',
             fontWeight: 600,
-            color: '#1a1a1a'
+            color: '#1a1a1a',
+            fontSize: '34px',
+            lineHeight: '1.5'
           }}
         >
           {t('hero.features.title')}
@@ -33,18 +35,20 @@ export function HeroFeatures() {
               <div className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-1" style={{ backgroundColor: '#384A9C' }}>
                 <Check className="w-4 h-4" strokeWidth={3} style={{ color: '#D7DEFF' }} />
               </div>
-              <p className="text-gray-700 text-lg leading-relaxed">
+              <p className="text-gray-700" style={{ fontSize: '16px', lineHeight: '1.5' }}>
                 {t(feature)}
               </p>
             </div>
           ))}
 
           <p
-            className="text-xl md:text-2xl mt-10 text-center"
+            className="mt-10 text-center"
             style={{
               fontFamily: 'Oswald, sans-serif',
               fontWeight: 600,
-              color: '#1a1a1a'
+              color: '#1a1a1a',
+              fontSize: '22px',
+              lineHeight: '1.5'
             }}
           >
             {t('hero.features.conclusion')}

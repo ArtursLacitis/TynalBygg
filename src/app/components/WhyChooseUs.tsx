@@ -33,17 +33,18 @@ export function WhyChooseUs() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2
-            className="text-5xl md:text-6xl mb-4"
             style={{
               fontFamily: 'Oswald, sans-serif',
-              fontWeight: 600
+              fontWeight: 600,
+              fontSize: '34px',
+              lineHeight: '1.5'
             }}
           >
             {t('why.title')}
           </h2>
           <p
-            className="text-gray-300 text-lg max-w-2xl mx-auto"
-            style={{ fontFamily: 'Inter, sans-serif' }}
+            className="text-gray-300 max-w-2xl mx-auto"
+            style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', lineHeight: '1.5' }}
           >
             {t('why.subtitle')}
           </p>
@@ -62,17 +63,18 @@ export function WhyChooseUs() {
                   <Icon className="w-8 h-8" strokeWidth={1.5} style={{ color: '#D7DEFF' }} />
                 </div>
                 <h3
-                  className="text-xl mb-3"
                   style={{
                     fontFamily: 'Oswald, sans-serif',
-                    fontWeight: 600
+                    fontWeight: 600,
+                    fontSize: '22px',
+                    lineHeight: '1.5'
                   }}
                 >
                   {t(feature.titleKey)}
                 </h3>
                 <p
-                  className="text-gray-300 leading-relaxed text-sm"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
+                  className="text-gray-300"
+                  style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', lineHeight: '1.5' }}
                 >
                   {t(feature.descKey)}
                 </p>

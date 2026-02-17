@@ -1,5 +1,4 @@
 import placeholder from '../../assets/11.webp';
-import placeholderFallback from '../../assets/fallback/16.png';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -15,7 +14,6 @@ export function About() {
             <div className="h-[600px] overflow-hidden">
               <ImageWithFallback
                 src={placeholder}
-                fallbackSrc={placeholderFallback}
                 alt="Professional craftsman at work"
                 className="w-full h-full object-cover"
                 loading="lazy"

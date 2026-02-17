@@ -1,23 +1,13 @@
 import paintingImage from '../../assets/10.webp';
-import paintingImageFallback from '../../assets/fallback/10.png';
 import electricalWork from '../../assets/16.webp';
-import electricalWorkFallback from '../../assets/fallback/16.png';
 import tileSetting from '../../assets/5.webp';
-import tileSettingFallback from '../../assets/fallback/5.png';
 import roofTiling from '../../assets/13.webp';
-import roofTilingFallback from '../../assets/fallback/13.png';
 import windows from '../../assets/8.webp';
-import windowsFallback from '../../assets/fallback/8.png';
 import masonry from '../../assets/14.webp';
-import masonryFallback from '../../assets/fallback/14.png';
-import pool from '../../assets/14.webp';
-import poolFallback from '../../assets/fallback/14.png';
-import houseRenovation from '../../assets/17.webp';
-import houseRenovationFallback from '../../assets/fallback/17.png';
+import pool from '../../assets/9.webp';
+import houseRenovation from '../../assets/19.webp';
 import sheetMetalWork from '../../assets/12.webp';
-import sheetMetalWorkFallback from '../../assets/fallback/12.png';
 import concreteWork from '../../assets/18.webp';
-import concreteWorkFallback from '../../assets/fallback/18.png';
 import { ChevronDown } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useLanguage } from '../context/LanguageContext';
@@ -27,62 +17,52 @@ const services = [
   {
     titleKey: 'services.painter',
     descKey: 'services.painter.desc',
-    image: paintingImage,
-    fallback: paintingImageFallback
+    image: paintingImage
   },
   {
     titleKey: 'services.electrician',
     descKey: 'services.electrician.desc',
-    image: electricalWork,
-    fallback: electricalWorkFallback
+    image: electricalWork
   },
   {
     titleKey: 'services.tile',
     descKey: 'services.tile.desc',
-    image: tileSetting,
-    fallback: tileSettingFallback
+    image: tileSetting
   },
   {
     titleKey: 'services.roof',
     descKey: 'services.roof.desc',
     image: roofTiling,
-    fallback: roofTilingFallback
   },
   {
     titleKey: 'services.windows',
     descKey: 'services.windows.desc',
-    image: windows,
-    fallback: windowsFallback
+    image: windows
   },
   {
     titleKey: 'services.masonry',
     descKey: 'services.masonry.desc',
-    image: masonry,
-    fallback: masonryFallback
+    image: masonry
   },
   {
     titleKey: 'services.pool',
     descKey: 'services.pool.desc',
-    image: pool,
-    fallback: poolFallback
+    image: pool
   },
   {
     titleKey: 'services.renovation',
     descKey: 'services.renovation.desc',
-    image: houseRenovation,
-    fallback: houseRenovationFallback
+    image: houseRenovation
   },
   {
     titleKey: 'services.concrete',
     descKey: 'services.concrete.desc',
-    image: concreteWork,
-    fallback: concreteWorkFallback
+    image: concreteWork
   },
   {
     titleKey: 'services.metal',
     descKey: 'services.metal.desc',
-    image: sheetMetalWork,
-    fallback: sheetMetalWorkFallback
+    image: sheetMetalWork
   }
 ];
 
@@ -142,7 +122,7 @@ function CustomSelect({
 
   return (
     <div ref={containerRef} className="relative">
-      <label htmlFor={id} className="block text-sm font-semibold text-gray-800 mb-2">
+      <label htmlFor={id} className="block text-sm font-semibold text-white mb-2">
         {label}
       </label>
       <button
@@ -299,16 +279,15 @@ export function Services() {
         </div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        <div className="flex flex-wrap justify-center gap-8">
           {services.map((service, index) => (
             <div
               key={index}
-              className="group"
+              className="group w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]"
             >
               <div className="overflow-hidden mb-4 h-64 rounded-lg">
                 <ImageWithFallback
                   src={service.image}
-                  fallbackSrc={service.fallback}
                   alt={t(service.titleKey)}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
@@ -334,81 +313,167 @@ export function Services() {
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
 
-        {/* Scaffolding Rental Section */}
-        <div className="mt-20 border-t border-gray-200 pt-20">
-          <div className="text-center mb-12">
-            <h2
-              className="text-4xl md:text-5xl mb-4"
-              style={{
-                fontFamily: 'Oswald, sans-serif',
-                fontWeight: 600,
-                color: '#1a1a1a'
-              }}
-            >
-              {t('services.scaffolding')}
-            </h2>
-            <p
-              className="text-gray-600 text-lg"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              {t('services.scaffolding.subtitle')}
-            </p>
-          </div>
+export function ScaffoldingRental() {
+  const { t } = useLanguage();
+  const selectableOptions = useMemo(
+    () =>
+      scaffoldingOptions.map((option) => {
+        if (option.size.includes('+')) {
+          return {
+            ...option,
+            height: 9,
+            length: 3,
+            label: option.size
+          };
+        }
+        const [height, length] = option.size.split('x').map(Number);
+        return {
+          ...option,
+          height,
+          length,
+          label: option.size
+        };
+      }),
+    []
+  );
 
-          {/* Scaffolding Selector */}
-          <div className="max-w-6xl mx-auto mb-12">
-            <div className="grid lg:grid-cols-2 gap-10" style={{ fontFamily: 'Inter, sans-serif' }}>
-              <div className="space-y-6">
-                <CustomSelect
-                  id="scaffolding-height"
-                  label={t('services.scaffolding.height')}
-                  value={selectedHeight}
-                  options={heightOptions}
-                  onChange={setSelectedHeight}
-                />
+  const heightOptions = useMemo(() => {
+    const heights = new Set<number>();
+    selectableOptions.forEach((option) => heights.add(option.height));
+    return Array.from(heights)
+      .sort((a, b) => a - b)
+      .map((height) => ({
+        value: String(height),
+        label: `${height} ${t('services.scaffolding.meter')}`
+      }));
+  }, [selectableOptions, t]);
 
-                <CustomSelect
-                  id="scaffolding-length"
-                  label={t('services.scaffolding.length')}
-                  value={selectedLength}
-                  options={lengthOptions}
-                  onChange={setSelectedLength}
-                />
-              </div>
+  const [selectedHeight, setSelectedHeight] = useState<string>(
+    heightOptions[0]?.value ?? '3'
+  );
 
-              <div className="bg-gray-50 p-6 border border-gray-200 rounded-lg">
-                {selectedOption ? (
-                  <>
-                    <h3
-                      className="text-3xl mb-2 text-center"
-                      style={{
-                        fontFamily: 'Oswald, sans-serif',
-                        fontWeight: 600,
-                        color: '#1a1a1a'
-                      }}
-                    >
-                      {selectedOption.size}
-                    </h3>
-                    <p className="text-center text-gray-900 font-semibold mb-4">
-                      {t('services.scaffolding.week')} {selectedOption.weekPrice} kr
-                    </p>
-                    <div className="grid gap-3 text-sm text-gray-700">
-                      {specItems.map((item) => (
-                        <div key={item.label} className="flex items-center justify-between border-b border-gray-200 pb-2">
-                          <span className="font-medium text-gray-800">{item.label}</span>
-                          <span>{item.value}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-center text-sm text-gray-600">No matching size.</div>
-                )}
-              </div>
+  const lengthOptions = useMemo(() => {
+    const lengths = new Map<string, string>();
+    selectableOptions
+      .filter((option) => String(option.height) === selectedHeight)
+      .forEach((option) => {
+        const lengthLabel =
+          option.size.includes('+') ? '3 + 3' : String(option.length);
+        lengths.set(String(option.length), `${lengthLabel} ${t('services.scaffolding.meter')}`);
+      });
+    return Array.from(lengths.entries()).map(([value, label]) => ({
+      value,
+      label
+    }));
+  }, [selectableOptions, selectedHeight, t]);
+
+  const [selectedLength, setSelectedLength] = useState<string>(
+    lengthOptions[0]?.value ?? '3'
+  );
+
+  useEffect(() => {
+    if (!lengthOptions.find((option) => option.value === selectedLength)) {
+      setSelectedLength(lengthOptions[0]?.value ?? '3');
+    }
+  }, [lengthOptions, selectedLength]);
+
+  const selectedOption = useMemo(
+    () =>
+      selectableOptions.find(
+        (option) =>
+          String(option.height) === selectedHeight &&
+          String(option.length) === selectedLength
+      ),
+    [selectableOptions, selectedHeight, selectedLength]
+  );
+
+  const specItems = selectedOption
+    ? [
+      { label: t('services.scaffolding.length'), value: `${selectedOption.length} ${t('services.scaffolding.meter')}` },
+      { label: t('services.scaffolding.maxwork'), value: `${selectedOption.maxWork} ${t('services.scaffolding.meter')}` },
+      { label: t('services.scaffolding.maxstand'), value: `${selectedOption.maxStand} ${t('services.scaffolding.meter')}` },
+      { label: t('services.scaffolding.depth'), value: `${selectedOption.depth} ${t('services.scaffolding.meter')}` },
+      { label: t('services.scaffolding.floors'), value: `${selectedOption.floors} ${t('services.scaffolding.plan')}` },
+      { label: t('services.scaffolding.weight'), value: `ca ${selectedOption.weight}kg` }
+    ]
+    : [];
+
+  return (
+    <section className="bg-gray-900 py-20 px-8 lg:px-16">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2
+            className="text-4xl md:text-5xl mb-4 text-white"
+            style={{
+              fontFamily: 'Oswald, sans-serif',
+              fontWeight: 600
+            }}
+          >
+            {t('services.scaffolding')}
+          </h2>
+          <p
+            className="text-gray-300 text-lg"
+            style={{ fontFamily: 'Inter, sans-serif' }}
+          >
+            {t('services.scaffolding.subtitle')}
+          </p>
+        </div>
+
+        {/* Scaffolding Selector */}
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-10" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <div className="space-y-6">
+              <CustomSelect
+                id="scaffolding-height"
+                label={t('services.scaffolding.height')}
+                value={selectedHeight}
+                options={heightOptions}
+                onChange={setSelectedHeight}
+              />
+
+              <CustomSelect
+                id="scaffolding-length"
+                label={t('services.scaffolding.length')}
+                value={selectedLength}
+                options={lengthOptions}
+                onChange={setSelectedLength}
+              />
+            </div>
+
+            <div className="bg-gray-800 p-6 border border-gray-700 rounded-lg">
+              {selectedOption ? (
+                <>
+                  <h3
+                    className="text-3xl mb-2 text-center text-white"
+                    style={{
+                      fontFamily: 'Oswald, sans-serif',
+                      fontWeight: 600
+                    }}
+                  >
+                    {selectedOption.size}
+                  </h3>
+                  <p className="text-center text-white font-semibold mb-4">
+                    {t('services.scaffolding.week')} {selectedOption.weekPrice} kr
+                  </p>
+                  <div className="grid gap-3 text-sm text-gray-300">
+                    {specItems.map((item) => (
+                      <div key={item.label} className="flex items-center justify-between border-b border-gray-700 pb-2">
+                        <span className="font-medium text-gray-200">{item.label}</span>
+                        <span>{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="text-center text-sm text-gray-400">No matching size.</div>
+              )}
             </div>
           </div>
-
         </div>
       </div>
     </section>

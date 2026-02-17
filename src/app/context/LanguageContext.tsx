@@ -116,6 +116,7 @@ const translations: Record<Language, Record<string, string>> = {
     'contact.form.phone': 'Phone',
     'contact.form.message': 'Message',
     'contact.form.submit': 'Send Message',
+    'contact.form.submitting': 'Sending...',
     'contact.form.required': '*',
 
     // Footer
@@ -227,6 +228,7 @@ const translations: Record<Language, Record<string, string>> = {
     'contact.form.phone': 'Telefon',
     'contact.form.message': 'Meddelande',
     'contact.form.submit': 'Skicka Meddelande',
+    'contact.form.submitting': 'Skickar...',
     'contact.form.required': '*',
 
     // Footer
@@ -338,6 +340,7 @@ const translations: Record<Language, Record<string, string>> = {
     'contact.form.phone': 'Tālrunis',
     'contact.form.message': 'Ziņa',
     'contact.form.submit': 'Sūtīt Ziņu',
+    'contact.form.submitting': 'Sūta...',
     'contact.form.required': '*',
 
     // Footer
@@ -363,6 +366,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 export function useLanguage() {
   const context = useContext(LanguageContext);
   if (!context) {
+    // During hot reload, context might be temporarily undefined
+    // Return a default fallback to prevent crashes
+    if (typeof window !== 'undefined' && import.meta.hot) {
+      console.warn('useLanguage called before LanguageProvider initialized (likely during hot reload)');
+      return {
+        language: 'en' as const,
+        setLanguage: () => { },
+        t: (key: string) => key
+      };
+    }
     throw new Error('useLanguage must be used within LanguageProvider');
   }
   return context;
