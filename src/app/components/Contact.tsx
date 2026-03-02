@@ -448,9 +448,8 @@ export function Contact() {
                   value={formData.name}
                   onChange={handleChange}
                   aria-invalid={Boolean(formErrors.name)}
-                  className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:border-gray-900 transition-colors ${
-                    formErrors.name ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:border-gray-900 transition-colors ${formErrors.name ? "border-red-500" : "border-gray-300"
+                    }`}
                 />
                 {formErrors.name && (
                   <p className="mt-2 text-sm text-red-600">{formErrors.name}</p>
@@ -474,9 +473,8 @@ export function Contact() {
                   onChange={handleChange}
                   autoComplete="email"
                   aria-invalid={Boolean(formErrors.email)}
-                  className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:border-gray-900 transition-colors ${
-                    formErrors.email ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:border-gray-900 transition-colors ${formErrors.email ? "border-red-500" : "border-gray-300"
+                    }`}
                 />
                 {formErrors.email && (
                   <p className="mt-2 text-sm text-red-600">{formErrors.email}</p>
@@ -501,17 +499,9 @@ export function Contact() {
                   pattern="[0-9]*"
                   maxLength={PHONE_MAX_DIGITS}
                   aria-invalid={Boolean(formErrors.phone)}
-                  className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:border-gray-900 transition-colors ${
-                    formErrors.phone ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:border-gray-900 transition-colors ${formErrors.phone ? "border-red-500" : "border-gray-300"
+                    }`}
                 />
-                <p className="mt-2 text-xs text-gray-500">
-                  {language === "en"
-                    ? `Digits only, max ${PHONE_MAX_DIGITS} numbers.`
-                    : language === "sv"
-                      ? `Endast siffror, max ${PHONE_MAX_DIGITS} siffror.`
-                      : `Tikai cipari, maksimums ${PHONE_MAX_DIGITS} cipari.`}
-                </p>
                 {formErrors.phone && (
                   <p className="mt-2 text-sm text-red-600">{formErrors.phone}</p>
                 )}
@@ -533,9 +523,8 @@ export function Contact() {
                   value={formData.message}
                   onChange={handleChange}
                   aria-invalid={Boolean(formErrors.message)}
-                  className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:border-gray-900 transition-colors resize-none ${
-                    formErrors.message ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:border-gray-900 transition-colors resize-none ${formErrors.message ? "border-red-500" : "border-gray-300"
+                    }`}
                 />
                 {formErrors.message && (
                   <p className="mt-2 text-sm text-red-600">{formErrors.message}</p>
