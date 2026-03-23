@@ -123,7 +123,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Footer
     'footer.rights': '© 2026 TINAL BYGG AB. All rights reserved.',
-    'footer.org': 'Org. nr: 559072-1204 | ROT registered'
+    'footer.org': 'Org. nr: 559072-1204'
   },
   sv: {
     // Navigation
@@ -237,7 +237,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Footer
     'footer.rights': '© 2026 TINAL BYGG AB. Alla rättigheter reserverade.',
-    'footer.org': 'Org. nr: 559072-1204 | ROT registrerat'
+    'footer.org': 'Org. nr: 559072-1204'
   },
   lv: {
     // Navigation
@@ -351,7 +351,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Footer
     'footer.rights': '© 2026 TINAL BYGG AB. Visas tiesības aizsargātas.',
-    'footer.org': 'Org. nr: 559072-1204 | ROT & RUT reģistrēts'
+    'footer.org': 'Org. nr: 559072-1204'
   }
 };
 
