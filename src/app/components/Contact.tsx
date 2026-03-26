@@ -61,8 +61,8 @@ const teamMembers = [
       lv: 'Runā: angļu, krievu, latviešu'
     },
     bio: {
-      en: 'Hello! I am incredibly lucky because there are three princesses in my family - my wife and two adorable daughters. These girls are everything to me! But do you know what else I like? Cars. I love finding forgotten old cars and then doing everything I can to bring them back to their original charm. Persistence and stubbornness to finish what was started. I start my workday with these qualities. And I teach the same thing to my colleagues - go all the way and finish what you started to 100%.',
-      sv: 'Hej! Jag är otroligt lyckligt lottad eftersom det finns tre prinsessor i min familj – min fru och två underbara döttrar. Dessa tjejer är allt för mig! Men vet du vad jag mer tycker om? Bilar. Jag älskar att hitta bortglömda gamla bilar och sedan göra allt jag kan för att återställa dem till deras ursprungliga charm. Uthållighet och envishet för att slutföra det som påbörjats. Jag börjar min arbetsdag med dessa egenskaper. Och jag lär mina kollegor samma sak – gå hela vägen och slutför det du har påbörjat till 100%.',
+      en: 'Hello! I am very lucky with my family. My children are my strength. They help me grow and become the best I can be. I always try to do everything so that my family can be proud of me. I also put 100% of myself into my work. I can react quickly, efficiently and without unnecessary stress to unexpected situations. And in the same way, I motivate my colleagues, because I believe that communication is the key to cooperation and professionally performed results.',
+      sv: 'Hej! Jag har stor tur med min familj. Mina barn är min styrka. De hjälper mig att växa och bli så bra som möjligt. Jag försöker alltid göra allt för att min familj ska kunna vara stolt över mig. Också på mitt jobb satsar jag 100% mig själv. Jag kan reagera snabbt, effektivt och utan onödig stress på oväntade situationer. Och på samma sätt motiverar jag mina kollegor, eftersom jag tror att kommunikation är nyckeln till samarbete och professionellt utfört resultat.',
       lv: 'Sveiki! Man ir neticami paveicies, jo manā ģimenē ir trīs princeses - mana sieva un divas apburošas meitas. Šīs meitenes man ir viss! Bet vai jūs zināt, kas man vēl patīk? Automašīnas. Es mīlu atrast aizmirstas vecas automašīnas un pēc tam darīt visu iespējamo, lai atjaunotu to sākotnējo šarmu. Neatlaidība un spītība pabeigt iesākto. Es sāku savu darba dienu ar šīm īpašībām. Un es mācu to pašu saviem kolēģiem - iet līdz galam un pabeigt iesākto līdz 100%.'
     },
     image: elmars_trankalis,
@@ -253,17 +253,16 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="bg-white py-24 px-8 lg:px-16"
+      className="bg-white py-40 px-8 lg:px-16"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-20">
           <h2
             style={{
               fontFamily: "Oswald, sans-serif",
               fontWeight: 600,
-              color: "#384A9C",
-              fontSize: "34px",
+              fontSize: "48px",
               lineHeight: "1.5",
             }}
           >
@@ -282,14 +281,14 @@ export function Contact() {
         </div>
 
         {/* Team Members */}
-        <div className="mb-20">
+        <div className="mb-48">
           <h3
-            className="mb-12 text-center"
+            className="mb-6 text-center"
             style={{
               fontFamily: "Oswald, sans-serif",
               fontWeight: 600,
-              color: "#1a1a1a",
-              fontSize: "22px",
+              color: "#384A9C",
+              fontSize: "28px",
               lineHeight: "1.5",
             }}
           >
@@ -300,20 +299,26 @@ export function Contact() {
                 : "Mūsu Komanda"}
           </h3>
 
-          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2 xl:grid-cols-3">
             {teamMembers.map((member, index) => (
-              <div key={index} className="bg-gray-50 p-8 rounded-lg">
-                <div className="flex items-start gap-6 mb-6">
-                  <div className="w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
+              <div
+                key={index}
+                className="relative rounded-r-2xl rounded-l-sm border-l-4 border-[#384A9C] bg-[#F8FAFF] p-6 shadow-sm transition-shadow duration-200 hover:shadow-md"
+              //className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-md"
+              >
+                {/* <div className="absolute left-0 top-0 h-full w-[3px] rounded-l-2xl bg-[#384A9C]/70" /> */}
+                <div className="mb-5 flex items-start gap-4">
+                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full ring-1 ring-gray-200">
                     <ImageWithFallback
                       src={member.image}
                       alt={member.name}
-                      className="w-full h-full object-cover"
+                      className="h-full w-full object-cover"
                     />
                   </div>
-                  <div>
+
+                  <div className="min-w-0 pt-1">
                     <h4
-                      className="text-2xl mb-2"
+                      className="mb-2 text-2xl leading-tight"
                       style={{
                         fontFamily: "Oswald, sans-serif",
                         fontWeight: 600,
@@ -322,9 +327,11 @@ export function Contact() {
                     >
                       {member.name}
                     </h4>
-                    <div className="flex items-center gap-2 text-gray-700 mb-1">
-                      <Phone className="w-4 h-4" />
+
+                    <div className="inline-flex items-center gap-2 rounded-full bg-gray-50 px-3 py-1.5 text-gray-700">
+                      <Phone className="h-4 w-4 text-[#384A9C]" />
                       <span
+                        className="leading-none"
                         style={{
                           fontFamily: "Inter, sans-serif",
                           fontSize: "14px",
@@ -337,16 +344,16 @@ export function Contact() {
                 </div>
 
                 <div
-                  className="space-y-3"
+                  className="space-y-3 border-t border-gray-100 pt-4"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
-                  <p className="text-sm text-gray-700 font-medium">
+                  <p className="text-sm font-medium leading-6 text-gray-800">
                     {member.responsibilities[language]}
                   </p>
-                  <p className="text-sm text-gray-700 font-medium">
+                  <p className="text-sm font-medium leading-6 text-gray-700">
                     {member.languages[language]}
                   </p>
-                  <p className="text-sm text-gray-600 leading-relaxed italic mt-4">
+                  <p className="mt-4 text-sm italic leading-7 text-gray-600">
                     {member.bio[language]}
                   </p>
                 </div>

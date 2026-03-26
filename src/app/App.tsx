@@ -1,23 +1,52 @@
-import { Services, ScaffoldingRental } from './components/Services';
+import { Services } from './components/Services';
 import { About } from './components/About';
-import { Gallery } from './components/Gallery';
 import { WhyChooseUs } from './components/WhyChooseUs';
 import { Contact } from './components/Contact';
 import { HeroFeatures } from './components/HeroFeatures';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { Globe, FileText } from 'lucide-react';
+import { DotLottieReact, type DotLottie } from '@lottiefiles/dotlottie-react';
 import { useState, useEffect, useRef } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import logoImage from '../assets/tinal-bygg-white.svg';
 import heroImage from '../assets/25.webp';
+import documentLottie from '../assets/Document.json?url';
 import { ImageWithFallback } from './components/figma/ImageWithFallback';
+
+function renderAnimatedChars(text: string, layer: 'base' | 'hover') {
+  return (
+    <span data-button-animate-chars="" className="inline-flex">
+      {Array.from(text).map((char, index) => (
+        <span
+          key={`${layer}-${char}-${index}`}
+          className="inline-flex h-6 overflow-hidden align-top"
+          style={{
+            whiteSpace: char === ' ' ? 'pre' : undefined
+          }}
+        >
+          <span
+            className={`inline-block transition-transform duration-500 ${layer === 'base' ? 'group-hover:-translate-y-full' : 'translate-y-full group-hover:translate-y-0'
+              }`}
+            style={{
+              transitionDelay: `${index * 0.01}s`,
+              transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+              whiteSpace: char === ' ' ? 'pre' : undefined
+            }}
+          >
+            {char}
+          </span>
+        </span>
+      ))}
+    </span>
+  );
+}
 
 function AppContent() {
   const { language, setLanguage, t } = useLanguage();
-  const [showLangMenu, setShowLangMenu] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showNavCTA, setShowNavCTA] = useState(false);
   const heroCtaRef = useRef<HTMLButtonElement>(null);
+  const heroCtaLottieRef = useRef<DotLottie | null>(null);
 
   // Preload hero image
   useEffect(() => {
@@ -58,10 +87,21 @@ function AppContent() {
     }
   };
 
-  const languages = [
-    { code: 'sv' as const, label: 'Svenska' },
-    { code: 'en' as const, label: 'English' }
-  ];
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'sv' : 'en');
+  };
+
+  const playHeroCtaLottie = () => {
+    const animation = heroCtaLottieRef.current;
+    if (!animation) return;
+
+    animation.stop();
+    animation.play();
+  };
+
+  const stopHeroCtaLottie = () => {
+    heroCtaLottieRef.current?.stop();
+  };
 
   return (
     <div className="relative w-full overflow-hidden bg-gray-900">
@@ -101,14 +141,14 @@ function AppContent() {
               <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 {t('nav.home')}
               </li>
-              <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('about')}>
-                {t('nav.about')}
+              <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('why-us')}>
+                {t('nav.why-us')}
               </li>
               <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('services')}>
                 {t('nav.services')}
               </li>
-              <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('gallery')}>
-                {t('nav.gallery')}
+              <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('about')}>
+                {t('nav.about')}
               </li>
               <li className="cursor-pointer transition-all duration-300 hover:text-gray-300 font-medium tracking-wide text-base" onClick={() => scrollToSection('contact')}>
                 {t('nav.contact')}
@@ -131,38 +171,18 @@ function AppContent() {
                 </button>
               )}
 
-              {/* Language Selector */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowLangMenu(!showLangMenu)}
-                  className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  <Globe className="w-5 h-5" />
-                  <span className="text-sm font-medium uppercase hidden min-[1150px]:inline">{language}</span>
-                </button>
-
-                {showLangMenu && (
-                  <div className="absolute top-full mt-2 right-0 bg-white rounded shadow-lg py-2 min-w-[140px]">
-                    {languages.map((lang) => (
-                      <button
-                        key={lang.code}
-                        onClick={() => {
-                          setLanguage(lang.code);
-                          setShowLangMenu(false);
-                        }}
-                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${language === lang.code
-                          ? 'bg-gray-100 text-gray-900 font-semibold'
-                          : 'text-gray-700 hover:bg-gray-50'
-                          }`}
-                        style={{ fontFamily: 'Inter, sans-serif' }}
-                      >
-                        {lang.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {/* Language Toggle */}
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+                aria-label={`Switch language to ${language === 'en' ? 'sv' : 'en'}`}
+              >
+                <Globe className="w-5 h-5" />
+                <span className="text-xs font-semibold uppercase tracking-wide sm:text-sm">
+                  {language}
+                </span>
+              </button>
             </div>
           </div>
         </nav>
@@ -170,14 +190,14 @@ function AppContent() {
         {/* Hero Content - Centered */}
         <div className="relative z-10 flex h-[calc(100vh-88px)] flex-col items-center justify-center px-8 text-center pt-20">
           <h1
-            className="text-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-wider mb-8"
+            className="text-white text-5xl md:text-6xl lg:text-7xl font-bold tracking-wider mb-4"
             style={{ fontFamily: 'Oswald, sans-serif' }}
           >
             TINAL BYGG AB
           </h1>
 
           <p
-            className="text-white/90 text-xl md:text-2xl lg:text-3xl font-light tracking-wide max-w-2xl mb-10"
+            className="text-white/90 text-xl md:text-2xl lg:text-3xl font-light tracking-wide max-w-2xl mb-16"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             {t('hero.subtitle')}
@@ -186,11 +206,38 @@ function AppContent() {
           {/* CTA Button */}
           <button
             ref={heroCtaRef}
-            className="text-white px-8 py-4 font-medium text-base tracking-wide transition-all hover:shadow-md hover:bg-[#2f3f8a] duration-300 rounded-md cursor-pointer bg-[#384A9C]"
-            style={{ fontFamily: 'Inter, sans-serif' }}
+            aria-label={t('nav.cta')}
+            className="group flex cursor-pointer items-center gap-3 overflow-hidden rounded-md bg-[#384A9C] px-4 py-2 text-white hover:bg-[#2f3f8a] hover:shadow-[0_16px_34px_rgba(18,27,67,0.35)]"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              boxShadow: '0 10px 24px rgba(56, 74, 156, 0.22)'
+            }}
+            onMouseEnter={playHeroCtaLottie}
+            onMouseLeave={stopHeroCtaLottie}
+            onFocus={playHeroCtaLottie}
+            onBlur={stopHeroCtaLottie}
             onClick={() => window.open('https://tally.so/r/7Rx0B9', '_blank')}
           >
-            {t('nav.cta')}
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center">
+              <DotLottieReact
+                src={documentLottie}
+                loop={false}
+                autoplay={false}
+                className="pointer-events-none h-8 w-8"
+                dotLottieRefCallback={(dotLottie) => {
+                  heroCtaLottieRef.current = dotLottie;
+                  dotLottie?.stop();
+                }}
+              />
+            </span>
+            <span className="relative block h-6 overflow-hidden text-base font-medium tracking-wide">
+              <span className="block">
+                {renderAnimatedChars(t('nav.cta'), 'base')}
+              </span>
+              <span className="absolute inset-x-0 top-0 block">
+                {renderAnimatedChars(t('nav.cta'), 'hover')}
+              </span>
+            </span>
           </button>
 
           {/* Optional: Subtle scroll indicator */}
@@ -209,9 +256,7 @@ function AppContent() {
       <HeroFeatures />
       <WhyChooseUs />
       <Services />
-      <ScaffoldingRental />
       <About />
-      <Gallery />
       <Contact />
 
       {/* Footer */}

@@ -4,60 +4,95 @@ import tileSetting from '../../assets/5.webp';
 import roofTiling from '../../assets/13.webp';
 import windows from '../../assets/8.webp';
 import masonry from '../../assets/14.webp';
-import pool from '../../assets/9.webp';
-import houseRenovation from '../../assets/19.webp';
-import sheetMetalWork from '../../assets/12.webp';
+import pool from '../../assets/52.webp';
+import houseRenovation from '../../assets/35.webp';
+import sheetMetalWork from '../../assets/37.webp';
 import concreteWork from '../../assets/18.webp';
-import { ChevronDown } from 'lucide-react';
+import image_2 from '../../assets/2.webp';
+import image_3 from '../../assets/3.webp';
+import image_4 from '../../assets/4.webp';
+import image_6 from '../../assets/6.webp';
+import image_7 from '../../assets/7.webp';
+import image_20 from '../../assets/20.webp';
+import image_21 from '../../assets/21.webp';
+import image_29 from '../../assets/29.webp';
+import image_31 from '../../assets/31.webp';
+import image_34 from '../../assets/34.webp';
+import image_37 from '../../assets/37.webp';
+import image_39 from '../../assets/39.webp';
+import image_41 from '../../assets/41.webp';
+import image_46 from '../../assets/46.webp';
+import image_48 from '../../assets/48.webp';
+import image_49 from '../../assets/49.webp';
+import image_50 from '../../assets/50.webp';
+import image_51 from '../../assets/51.webp';
+import { ChevronDown, ChevronLeft, ChevronRight, Images } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useLanguage } from '../context/LanguageContext';
 import { useMemo, useState, useEffect, useRef } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 
-const services = [
+type ServiceItem = {
+  titleKey: string;
+  descKey: string;
+  image: string;
+  gallery: string[];
+};
+
+const services: ServiceItem[] = [
   {
     titleKey: 'services.painter',
     descKey: 'services.painter.desc',
-    image: paintingImage
+    image: paintingImage,
+    gallery: [paintingImage, image_2, image_37, image_4]
   },
   {
     titleKey: 'services.electrician',
     descKey: 'services.electrician.desc',
-    image: electricalWork
+    image: electricalWork,
+    gallery: [electricalWork, image_46, image_20]
   },
   {
     titleKey: 'services.tile',
     descKey: 'services.tile.desc',
-    image: tileSetting
+    image: tileSetting,
+    gallery: [tileSetting, image_39, image_29]
   },
   {
     titleKey: 'services.roof',
     descKey: 'services.roof.desc',
     image: roofTiling,
+    gallery: [roofTiling, image_3, image_7, image_21, image_34]
   },
   {
     titleKey: 'services.windows',
     descKey: 'services.windows.desc',
-    image: windows
+    image: windows,
+    gallery: [windows, image_46, image_50]
   },
   {
     titleKey: 'services.masonry',
     descKey: 'services.masonry.desc',
-    image: masonry
+    image: masonry,
+    gallery: [masonry, concreteWork, image_41]
   },
   {
     titleKey: 'services.pool',
     descKey: 'services.pool.desc',
-    image: pool
+    image: pool,
+    gallery: [pool, image_49, image_48]
   },
   {
     titleKey: 'services.renovation',
     descKey: 'services.renovation.desc',
-    image: houseRenovation
+    image: houseRenovation,
+    gallery: [houseRenovation, image_31, image_51, image_6, image_20]
   },
   {
     titleKey: 'services.metal',
     descKey: 'services.metal.desc',
-    image: sheetMetalWork
+    image: sheetMetalWork,
+    gallery: [sheetMetalWork, image_41, image_48]
   }
 ];
 
@@ -167,6 +202,42 @@ function CustomSelect({
 
 export function Services() {
   const { t } = useLanguage();
+  const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const navigationLockRef = useRef(false);
+
+  const activeService =
+    activeServiceIndex !== null ? services[activeServiceIndex] : null;
+
+  useEffect(() => {
+    if (activeServiceIndex === null || !activeService) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight') {
+        setActiveImageIndex((current) => (current + 1) % activeService.gallery.length);
+      }
+
+      if (event.key === 'ArrowLeft') {
+        setActiveImageIndex(
+          (current) => (current - 1 + activeService.gallery.length) % activeService.gallery.length
+        );
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeServiceIndex, activeService]);
+
+  useEffect(() => {
+    if (!activeService) return;
+
+    setActiveImageIndex((current) => {
+      if (current < 0) return 0;
+      if (current >= activeService.gallery.length) return 0;
+      return current;
+    });
+  }, [activeService]);
+
   const selectableOptions = useMemo(
     () =>
       scaffoldingOptions.map((option) => {
@@ -250,66 +321,237 @@ export function Services() {
     ]
     : [];
 
-  return (
-    <section id="services" className="bg-white py-24 px-8 lg:px-16">
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2
-            className="text-5xl md:text-6xl mb-4"
-            style={{
-              fontFamily: 'Oswald, sans-serif',
-              fontWeight: 600,
-              color: '#1a1a1a'
-            }}
-          >
-            {t('services.title')}
-          </h2>
-          <p
-            className="text-gray-600 text-lg max-w-2xl mx-auto"
-            style={{ fontFamily: 'Inter, sans-serif' }}
-          >
-            {t('services.subtitle')}
-          </p>
-        </div>
+  const openServiceGallery = (serviceIndex: number) => {
+    setActiveServiceIndex(serviceIndex);
+    setActiveImageIndex(0);
+  };
 
-        {/* Services Grid */}
-        <div className="flex flex-wrap justify-center gap-8">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="group w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]"
+  const closeServiceGallery = (open: boolean) => {
+    if (!open) {
+      setActiveServiceIndex(null);
+      setActiveImageIndex(0);
+    }
+  };
+
+  const showNextImage = () => {
+    if (!activeService) return;
+
+    runWithNavigationLock(() => {
+      setActiveImageIndex((current) => {
+        const total = activeService.gallery.length;
+        return (current + 1) % total;
+      });
+    });
+  };
+
+  const showPreviousImage = () => {
+    if (!activeService) return;
+
+    runWithNavigationLock(() => {
+      setActiveImageIndex((current) => {
+        const total = activeService.gallery.length;
+        return (current - 1 + total) % total;
+      });
+    });
+  };
+
+  const runWithNavigationLock = (callback: () => void) => {
+    if (navigationLockRef.current) return;
+
+    navigationLockRef.current = true;
+    callback();
+
+    window.setTimeout(() => {
+      navigationLockRef.current = false;
+    }, 220);
+  };
+
+  return (
+    <>
+      <section id="services" className="bg-white py-48 px-8 lg:px-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <h2
+              className="text-5xl md:text-6xl mb-4"
+              style={{
+                fontFamily: 'Oswald, sans-serif',
+                fontWeight: 600,
+                color: '#1a1a1a'
+              }}
             >
-              <div className="overflow-hidden mb-4 h-64 rounded-lg">
-                <ImageWithFallback
-                  src={service.image}
-                  alt={t(service.titleKey)}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <h3
-                className="text-xl md:text-2xl mb-2"
-                style={{
-                  fontFamily: 'Oswald, sans-serif',
-                  fontWeight: 600,
-                  color: '#1a1a1a'
-                }}
+              {t('services.title')}
+            </h2>
+            <p
+              className="text-gray-600 text-lg max-w-2xl mx-auto"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              {t('services.subtitle')}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 xl:grid-cols-3">
+            {services.map((service, index) => (
+              <article
+                key={service.titleKey}
+                className="group flex h-full flex-col"
               >
-                {t(service.titleKey)}
-              </h3>
-              <p
-                className="text-gray-600 leading-relaxed text-sm"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                {t(service.descKey)}
-              </p>
-            </div>
-          ))}
+                <button
+                  type="button"
+                  onClick={() => openServiceGallery(index)}
+                  aria-label={`${t('services.gallery.open')} ${t(service.titleKey)}`}
+                  className="relative overflow-hidden mb-6 h-72 w-full rounded-lg text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#384A9C] focus:ring-offset-4"
+                >
+                  <ImageWithFallback
+                    src={service.image}
+                    alt={t(service.titleKey)}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 transition-opacity group-hover:from-black/90" />
+                  <div className="absolute left-4 right-4 bottom-4 flex items-end justify-between gap-3">
+                    <div>
+                      <span
+                        className="inline-flex items-center justify-center rounded-full border border-white/25 bg-black/45 p-2 text-white shadow-sm"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                        aria-hidden="true"
+                      >
+                        <Images className="h-3.5 w-3.5" />
+                      </span>
+                    </div>
+                    <span
+                      className="hidden sm:inline-flex rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-gray-900 shadow-sm transition-transform group-hover:-translate-y-1"
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                    >
+                      {t('services.gallery.cta')}
+                    </span>
+                  </div>
+                </button>
+                <h3
+                  className="mb-4 min-h-[1.5rem] text-xl md:text-2xl"
+                  style={{
+                    fontFamily: 'Oswald, sans-serif',
+                    fontWeight: 600,
+                    color: '#1a1a1a'
+                  }}
+                >
+                  {t(service.titleKey)}
+                </h3>
+                <p
+                  className="min-h-[6.5rem] text-sm leading-relaxed text-gray-600 md:text-[15px]"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  {t(service.descKey)}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <Dialog open={activeServiceIndex !== null} onOpenChange={closeServiceGallery}>
+        {activeService && (
+          <DialogContent className="h-[100dvh] w-screen max-w-none overflow-hidden border-0 bg-[#0d0d0f] p-0 text-white shadow-2xl lg:h-[94dvh] lg:w-[96vw] lg:max-w-[1800px]">
+            <div className="grid h-full min-h-0 gap-0 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px]">
+              {/* Image Area */}
+              <div className="relative min-h-0 overflow-hidden bg-black">
+                <div className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-white/85">
+                  {activeImageIndex + 1} / {activeService.gallery.length}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showPreviousImage();
+                  }}
+                  aria-label={t('services.gallery.previous')}
+                  className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white transition hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-white/60 sm:h-11 sm:w-11"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showNextImage();
+                  }}
+                  aria-label={t('services.gallery.next')}
+                  className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white transition hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-white/60 sm:h-11 sm:w-11"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+
+                <div className="flex h-[64dvh] w-full items-center justify-center overflow-hidden sm:h-[68dvh] lg:h-full lg:min-h-0 lg:p-6 xl:p-8">
+                  <ImageWithFallback
+                    src={activeService.gallery[activeImageIndex]}
+                    alt={`${t(activeService.titleKey)} ${activeImageIndex + 1}`}
+                    className="block max-h-full max-w-full object-contain"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+
+              {/* Side Panel */}
+              <div className="flex min-h-0 flex-col overflow-hidden border-t border-white/10 bg-[#141418] lg:border-l lg:border-t-0">
+                <DialogHeader className="px-4 pt-4 text-left sm:px-6 sm:pt-6">
+                  <DialogTitle
+                    className="text-2xl text-white sm:text-3xl"
+                    style={{ fontFamily: 'Oswald, sans-serif' }}
+                  >
+                    {t(activeService.titleKey)}
+                  </DialogTitle>
+                  <DialogDescription
+                    className="text-sm leading-relaxed text-white/70"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                  >
+                    {t(activeService.descKey)}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="px-4 pt-4 sm:px-6">
+                  <p
+                    className="text-xs font-semibold uppercase tracking-[0.24em] text-white/55"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                  >
+                    {t('services.gallery.related')}
+                  </p>
+                </div>
+
+                <div className="overflow-y-auto px-0 pb-4 pt-4 sm:px-6 sm:pb-6">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                    {activeService.gallery.map((image, imageIndex) => (
+                      <button
+                        key={`${activeService.titleKey}-${imageIndex}`}
+                        type="button"
+                        onClick={() => setActiveImageIndex(imageIndex)}
+                        aria-label={`${t('services.gallery.open')} ${t(activeService.titleKey)} ${imageIndex + 1}`}
+                        className={`overflow-hidden border transition ${imageIndex === activeImageIndex
+                          ? 'border-white shadow-[0_0_0_1px_rgba(255,255,255,0.35)]'
+                          : 'border-white/10 opacity-75 hover:opacity-100'
+                          } rounded-none sm:rounded-md`}
+                      >
+                        <ImageWithFallback
+                          src={image}
+                          alt={`${t(activeService.titleKey)} thumbnail ${imageIndex + 1}`}
+                          className="h-24 w-full object-cover sm:h-20"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        )}
+      </Dialog>
+    </>
   );
 }
 
@@ -419,7 +661,6 @@ export function ScaffoldingRental() {
           </p>
         </div>
 
-        {/* Scaffolding Selector */}
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-10" style={{ fontFamily: 'Inter, sans-serif' }}>
             <div className="space-y-6">

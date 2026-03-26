@@ -1,4 +1,3 @@
-import image_1 from '../../assets/1.webp';
 import image_2 from '../../assets/2.webp';
 import image_3 from '../../assets/3.webp';
 import image_4 from '../../assets/4.webp';
@@ -18,6 +17,7 @@ import image_48 from '../../assets/48.webp';
 import image_21 from '../../assets/21.webp';
 import image_12 from '../../assets/12.webp';
 import image_37 from '../../assets/37.webp';
+import image_39 from '../../assets/39.webp';
 import image_51 from '../../assets/51.webp';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useLanguage } from '../context/LanguageContext';
@@ -34,7 +34,7 @@ const galleryImages = [
     span: 'col-span-1 row-span-1'
   },
   {
-    url: image_1,
+    url: image_39,
     alt: 'Elegant bathroom renovation',
     span: 'col-span-1 row-span-1'
   },
