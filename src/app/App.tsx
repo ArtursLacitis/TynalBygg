@@ -15,17 +15,17 @@ import { ImageWithFallback } from './components/figma/ImageWithFallback';
 
 function renderAnimatedChars(text: string, layer: 'base' | 'hover') {
   return (
-    <span data-button-animate-chars="" className="inline-flex items-center leading-none">
+    <span data-button-animate-chars="" className="inline-flex h-[1.55em] items-center leading-[1.05]">
       {Array.from(text).map((char, index) => (
         <span
           key={`${layer}-${char}-${index}`}
-          className="inline-flex h-[1.15em] items-center overflow-hidden align-top"
+          className="inline-flex h-[1.55em] items-center overflow-hidden align-middle"
           style={{
             whiteSpace: char === ' ' ? 'pre' : undefined
           }}
         >
           <span
-            className={`inline-block transition-transform duration-500 ${layer === 'base' ? 'group-hover:-translate-y-full' : 'translate-y-full group-hover:translate-y-0'
+            className={`inline-block transition-transform duration-500 will-change-transform ${layer === 'base' ? 'group-hover:-translate-y-[140%]' : 'translate-y-[140%] group-hover:translate-y-0'
               }`}
             style={{
               transitionDelay: `${index * 0.01}s`,
@@ -43,11 +43,11 @@ function renderAnimatedChars(text: string, layer: 'base' | 'hover') {
 
 function AnimatedCtaLabel({ text, className = '' }: { text: string; className?: string }) {
   return (
-    <span className={`relative overflow-hidden leading-none ${className}`}>
-      <span className="block">
+    <span className={`relative inline-flex h-[1.55em] items-center overflow-hidden align-middle leading-[1.05] ${className}`}>
+      <span className="flex h-full items-center">
         {renderAnimatedChars(text, 'base')}
       </span>
-      <span className="absolute inset-x-0 top-0 block">
+      <span className="absolute inset-0 flex items-center">
         {renderAnimatedChars(text, 'hover')}
       </span>
     </span>
